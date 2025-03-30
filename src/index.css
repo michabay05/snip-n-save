@@ -1,0 +1,17 @@
+@import "tailwindcss";
+/* @import url("https://fonts.googleapis.com/css2?family=Delius&display=swap"); */
+
+@font-face {
+    font-family: Quattrocento;
+    src: url("./Quattrocento-Regular.ttf");
+}
+
+@font-face {
+    font-family: Delius;
+    src: url("./Delius-Regular.ttf");
+}
+
+@theme {
+    --font-delius: Delius, "cursive";
+    --font-quattrocento: Quattrocento, "serif";
+}

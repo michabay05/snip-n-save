@@ -1,0 +1,11 @@
+{
+    "name": "React + Vite Chrome Extensions",
+    "description": "A simple React ap as a chrome extensions",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": "vite.svg"
+    },
+    "permissions": []
+}
