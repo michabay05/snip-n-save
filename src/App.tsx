@@ -1,4 +1,4 @@
-import { JSX, useId, useState } from "react";
+import { JSX, useEffect, useId, useState } from "react";
 import "./index.css";
 
 type Snippet = {
@@ -8,34 +8,63 @@ type Snippet = {
 };
 
 const LS_SNIPS_KEY: string = "snipArr";
+const GOOD_INPUT_COLOR: string = "border-blue-700";
+const BAD_INPUT_COLOR: string = "border-red-600";
+
+// Adding to the context menu (i.e right click menu)
+// Source: https://developer.chrome.com/docs/extensions/reference/api/contextMenus#method-create
 
 export default function App(): JSX.Element {
-    const [snippet, setSnipArr] = useState((): Array<Snippet> => {
-        const localSnipArr = localStorage.getItem(LS_SNIPS_KEY);
-        return localSnipArr ? JSON.parse(localSnipArr) : new Array<Snippet>();
-    });
+    const [snippet, setSnipArr] = useState(new Array<Snippet>());
+
+    // Load snippet array on mount
+    useEffect((): void => {
+        chrome.storage.sync.get(LS_SNIPS_KEY)
+            .then(val => {
+                console.log("sync storage value loaded");
+                console.log(JSON.stringify(val));
+                if (val[LS_SNIPS_KEY]) setSnipArr(val[LS_SNIPS_KEY]);
+            }).catch(() => {
+                console.warn("Could not load sync storage value");
+            });
+    }, []);
 
     const quoteID = useId();
-    const linkID = useId();
+    const sourceID = useId();
 
     const updateLocalStorage = (snipArr: Array<Snippet>): void => {
-        localStorage.setItem(LS_SNIPS_KEY, JSON.stringify(snipArr));
+        // localStorage.setItem(LS_SNIPS_KEY, JSON.stringify(snipArr));
+        chrome.storage.sync.set({ "snipArr": snipArr })
+            .then(() => console.log("snippet updated in local storage"));
     };
 
     const addSnippet = (): void => {
         const quoteInput = document.getElementById(quoteID);
-        const linkInput = document.getElementById(linkID);
-        if (quoteInput === null || linkInput === null) return;
+        const sourceInput = document.getElementById(sourceID);
+        if (quoteInput === null || sourceInput === null) return;
+        const quote: string = (quoteInput as HTMLInputElement).value;
+        const source: string = (sourceInput as HTMLInputElement).value;
+
+        // Verify if source is a valid url
+        if (!URL.canParse(source)) {
+            // Highlight link with a red border
+            sourceInput.classList.remove(GOOD_INPUT_COLOR);
+            sourceInput.classList.add(BAD_INPUT_COLOR);
+            return;
+        } else {
+            sourceInput.classList.remove(BAD_INPUT_COLOR);
+            sourceInput.classList.add(GOOD_INPUT_COLOR);
+        }
+
         const newSnip: Snippet = {
             id: Date.now(),
-            quote: (quoteInput as HTMLInputElement).value,
-            source: (linkInput as HTMLInputElement).value,
+            quote, source,
         };
         const updatedSnipArr = [...snippet, newSnip];
         setSnipArr(updatedSnipArr);
         // Clear inputs after saving snippet
         (quoteInput as HTMLInputElement).value = "";
-        (linkInput as HTMLInputElement).value = "";
+        (sourceInput as HTMLInputElement).value = "";
         // Save to localStorage
         updateLocalStorage(updatedSnipArr);
     };
@@ -47,26 +76,27 @@ export default function App(): JSX.Element {
     };
 
     const visitLink = (id: number): void => {
-        const link: Snippet | null = snippet.find(snip => snip.id == id);
+        const link: Snippet | undefined = snippet.find(snip => snip.id == id);
         if (link) window.open(link.source, "_blank");
     };
 
     return (
         <div className="mx-auto max-w-xl">
             <div className="flex flex-col place-items-center w-5/6 mx-auto">
+                <h2 className="text-2xl font-delius text-center my-2">SnipSave</h2>
                 <p className="font-delius text-center my-2">
                     You have {snippet.length ? snippet.length : "no"} snippets! Let's add some more!
                 </p>
                 <input
-                    className="border-2 border-blue-700 py-1 px-2 rounded-md container truncate focus:outline-blue-400"
+                    className={`border-2 ${GOOD_INPUT_COLOR} py-1 px-2 rounded-md container truncate focus:outline-blue-400`}
                     id={quoteID}
                     type="text" placeholder="Quote" />
                 <input
-                    className="border-2 border-blue-700 my-3 py-1 px-2 rounded-md container truncate focus:outline-blue-400"
-                    id={linkID} type="text" placeholder="Link" />
+                    className={`border-2 ${GOOD_INPUT_COLOR} my-3 py-1 px-2 rounded-md container truncate focus:outline-blue-400`}
+                    id={sourceID} type="text" placeholder="Source" />
                 <div className="container flex justify-center">
                     <button
-                        className="border bg-blue-800 text-white font-quattrocento hover:cursor-pointer font-bold rounded-md px-8 py-2"
+                        className="border bg-blue-800 text-white font-quattrocento font-bold hover:cursor-pointer rounded-md px-8 py-2"
                         onClick={addSnippet}>Save</button>
                 </div>
             </div>

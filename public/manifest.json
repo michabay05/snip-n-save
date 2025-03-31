@@ -1,11 +1,25 @@
 {
-    "name": "React + Vite Chrome Extensions",
-    "description": "A simple React ap as a chrome extensions",
-    "version": "1.0",
+    "name": "SnipSave",
+    "description": "Save all your snippets in one place",
+    "version": "0.1.0",
     "manifest_version": 3,
     "action": {
-        "default_popup": "index.html",
-        "default_icon": "vite.svg"
+        "default_popup": "index.html"
     },
-    "permissions": []
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "Delius-Regular.ttf",
+                "Quattrocento-Regular.ttf",
+                "Quattrocento-Bold.ttf"
+            ],
+            "matches": [ "*://*/*" ]
+        }
+    ],
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "storage",
+        "contextMenus"
+    ]
 }
