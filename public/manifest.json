@@ -8,12 +8,8 @@
     },
     "web_accessible_resources": [
         {
-            "resources": [
-                "Delius-Regular.ttf",
-                "Quattrocento-Regular.ttf",
-                "Quattrocento-Bold.ttf"
-            ],
-            "matches": [ "*://*/*" ]
+            "resources": [ "fonts/*.ttf" ],
+            "matches": ["<all_urls>"]
         }
     ],
     "permissions": [

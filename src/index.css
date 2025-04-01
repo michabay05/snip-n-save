@@ -2,16 +2,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Delius&family=Quattrocento:wght@400;700&display=swap");
 
 @font-face {
-    font-family: Quattrocento;
-    src: "./Quattrocento-Regular.ttf";
+    font-family: "Quattrocento";
+    src: url("./fonts/Quattrocento-Regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: Delius;
-    src: "./Delius-Regular.ttf";
+    font-family: "Delius";
+    src: url("./fonts/Delius-Regular.ttf") format("truetype");
 }
 
 @theme {
-    --font-delius: Delius, "cursive";
-    --font-quattrocento: Quattrocento, "serif";
+    --font-delius: "Delius", "cursive";
+    --font-quattrocento: "Quattrocento", "serif";
 }
