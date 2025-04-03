@@ -4,11 +4,28 @@
     "version": "0.1.0",
     "manifest_version": 3,
     "action": {
-        "default_popup": "index.html"
+        "default_popup": "index.html",
+        "default_icon": {
+            "16": "icons/postIt_16.png",
+            "48": "icons/postIt_48.png",
+            "128": "icons/postIt_128.png"
+        }
+    },
+    "icons": {
+        "16": "icons/postIt_16.png",
+        "32": "icons/postIt_32.png",
+        "48": "icons/postIt_48.png",
+        "96": "icons/postIt_96.png",
+        "128": "icons/postIt_128.png",
+        "512": "icons/postIt_512.png"
     },
     "web_accessible_resources": [
         {
             "resources": [ "fonts/*.ttf" ],
+            "matches": ["<all_urls>"]
+        },
+        {
+            "resources": [ "icons/*.png" ],
             "matches": ["<all_urls>"]
         }
     ],

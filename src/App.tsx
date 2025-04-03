@@ -1,5 +1,5 @@
-import { JSX, useEffect, useId, useState } from "react";
 import "./index.css";
+import { JSX, useEffect, useId, useState } from "react";
 
 type Snippet = {
     id: number;
@@ -81,7 +81,7 @@ export default function App(): JSX.Element {
     };
 
     return (
-        <div className="mx-auto max-w-xl">
+        <div className="mx-auto w-sm my-4">
             <div className="flex flex-col place-items-center w-5/6 mx-auto">
                 <h2 className="text-2xl font-delius text-center my-2">SnipSave</h2>
                 <p className="font-delius text-center my-2">
@@ -123,13 +123,13 @@ function Snippet(prop: SnippetProps): JSX.Element {
     const {id, quote, source} = prop.snippet;
 
     return (
-        <div className="container my-3 py-2 px-4 flex w-full justify-between border rounded">
+        <div className="container my-3 py-2 px-2 flex w-full justify-between border rounded">
             <button
                 onClick={() => prop.removeFn(id)}
                 className="cursor-pointer">
                 <DeleteTrash />
             </button>
-            <div className="m-auto w-4/5">
+            <div className="m-auto w-3/4">
                 <p className="font-delius text-md truncate">{`"${quote}"`}</p>
                 <p className="font-quattrocento text-xs text-gray-600 truncate">{source}</p>
             </div>
